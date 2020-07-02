@@ -8,6 +8,17 @@
 	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 	  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+	  
+	  <style>
+	    .form-valid  {
+		  opacity:0.5;
+		}
+
+		.form-control-label abbr {
+		  text-decoration: none;
+		  font-weight: normal;
+		}
+	  </style>
   </head>
     <body>
 	<div class="jumbotron text-center">
@@ -35,7 +46,7 @@
 				  </form>
 			  </div>
 		  <div id="cpd" style="display:none;">
-			<form id="cpf" class="needs-validation" novalidate>
+			<form id="cpf">
 			  <div class="form-group row">
 				  <label for="cp_sp" class="col-sm-4 col-form-label"><strong>Selling Price :</strong></label>
 				  <div class="col-sm-8">
@@ -55,14 +66,14 @@
 				  </div>
 				</div>
 				<div class="form-group row">
-				  <input type="button" class="btn btn-success mx-auto" onClick="cp()" Value="Calculate" />
+				  <input type="button" class="btn btn-success mx-auto" onClick="customvalidate('cpf','cp')" Value="Calculate" />
 				  <input type="button" class="btn btn-danger mx-auto" onClick="clearf()" Value="Clear" />
 				</div>
 			</form>
 		  </div>
 
 		  <div id="spd" style="display:none;">
-			<form id="spf" class="needs-validation" novalidate>
+			<form id="spf">
 			  <div class="form-group row">
 				  <label for="sp_cp" class="col-sm-4 col-form-label"><strong>Cost Price :</strong></label>
 				  <div class="col-sm-8">
@@ -82,7 +93,7 @@
 				  </div>
 				</div>
 				<div class="form-group row">
-				  <input type="button" class="btn btn-success mx-auto" onClick="sp()" Value="Calculate" />
+				  <input type="button" class="btn btn-success mx-auto" onClick="customvalidate('spf','sp')" Value="Calculate" />
 				  <input type="button" class="btn btn-danger mx-auto" onClick="clearf()" Value="Clear" />
 				</div>
 			</form>
@@ -108,7 +119,7 @@
 				  </div>
 				</div>
 				<div class="form-group row">
-					  <input type="button" class="btn btn-success mx-auto" onClick="mp()" Value="Calculate" />
+					  <input type="button" class="btn btn-success mx-auto" onClick="customvalidate('mpf','mp')" Value="Calculate" />
 					  <input type="button" class="btn btn-danger mx-auto" onClick="clearf()" Value="Clear" />
 				</div>    
 			</form>      
@@ -135,8 +146,35 @@
 		</div>
 	</div>
 	</div>
+
   </body>
   <script>
+	function customvalidate(form_name,function_name){
+		console.log(function_name);
+		console.log(form_name);
+		var form = document.getElementById(form_name);
+		if (form.checkValidity() === false) {
+			//alert("Inside");
+			event.preventDefault();
+			event.stopPropagation();
+			form.classList.add('was-validated');
+		} 
+		else {
+			//alert("Check cleared");
+			switch(function_name) {
+			  case "cp":
+				cp();
+				break;
+			  case "sp":
+				sp();
+				break;
+			  default:
+				mp();
+			}
+		}
+		
+		
+	}
     
     /*
     CP = SP*(100-MP)/100
@@ -182,44 +220,48 @@
 	  document.getElementById("form").reset();
       document.getElementById("cpd").style.display = "none";
       document.getElementById("spd").style.display = "none";
-      document.getElementById("mpd").style.display = "none";	  
+      document.getElementById("mpd").style.display = "none";
+	  document.getElementById("cpf").classList.remove('was-validated');
+      document.getElementById("spf").classList.remove('was-validated');
+      document.getElementById("mpf").classList.remove('was-validated');
+	
 	}
     
     function myFunctioncp() {
       document.getElementById("cpd").style.display = "block";
       document.getElementById("spd").style.display = "none";
       document.getElementById("mpd").style.display = "none";
+	  document.getElementById("resultlabel").innerHTML = "";      			
+      document.getElementById("result").innerHTML = "";
+	  document.getElementById("cpf").classList.remove('was-validated');
+      document.getElementById("spf").classList.remove('was-validated');
+      document.getElementById("mpf").classList.remove('was-validated');
     }
     
     function myFunctionsp() {
       document.getElementById("cpd").style.display = "none";
       document.getElementById("spd").style.display = "block";
       document.getElementById("mpd").style.display = "none";
+	  document.getElementById("resultlabel").innerHTML = "";      			
+      document.getElementById("result").innerHTML = "";
+	  document.getElementById("cpf").classList.remove('was-validated');
+      document.getElementById("spf").classList.remove('was-validated');
+      document.getElementById("mpf").classList.remove('was-validated');
     }
     
     function myFunctionmp() {
       document.getElementById("cpd").style.display = "none";
       document.getElementById("spd").style.display = "none";
-      document.getElementById("mpd").style.display = "block";  
+      document.getElementById("mpd").style.display = "block";
+	  document.getElementById("resultlabel").innerHTML = "";      			
+      document.getElementById("result").innerHTML = "";
+	  document.getElementById("cpf").classList.remove('was-validated');
+      document.getElementById("spf").classList.remove('was-validated');
+      document.getElementById("mpf").classList.remove('was-validated');
     }
 	
-	(function() {
-	  'use strict';
-	  window.addEventListener('load', function() {
-		// Fetch all the forms we want to apply custom Bootstrap validation styles to
-		var forms = document.getElementsByClassName('needs-validation');
-		// Loop over them and prevent submission
-		var validation = Array.prototype.filter.call(forms, function(form) {
-		  form.addEventListener('submit', function(event) {
-			if (form.checkValidity() === false) {
-			  event.preventDefault();
-			  event.stopPropagation();
-			}
-			form.classList.add('was-validated');
-		  }, false);
-		});
-	  }, false);
-	})();
+
+	
   </script>
  
   </html>
